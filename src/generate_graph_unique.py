@@ -69,7 +69,7 @@ print 'num of edges:', len(g.edges())
 
 # plot graph figure
 nx.draw_spring(g)
-plt.savefig("test.png")
+# plt.savefig("test.png")
 plt.show()
 
 # with open(RESULT_PATH+TYPE+'_test.txt', 'w') as f:
