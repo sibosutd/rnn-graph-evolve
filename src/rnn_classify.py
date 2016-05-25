@@ -1,7 +1,7 @@
 """
 Classifying graphs using RNN.
 
-Model: ER and BA
+Model: BA and RANDOM
 """
 
 import sys

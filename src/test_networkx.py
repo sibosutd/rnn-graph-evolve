@@ -4,11 +4,12 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-a = np.reshape(np.random.random_integers(0, 1, size=25), (5, 5))
+a = np.zeros((5, 5))
 D = nx.Graph(a)
-
-print len(D.edges())
-
+edges = [(0, 1), (2, 1)]
+D.add_edges_from(edges)
+print D.edges()
+# draw
 nx.draw(D)
-plt.savefig("test.png")
+# plt.savefig("test.png")
 plt.show()
