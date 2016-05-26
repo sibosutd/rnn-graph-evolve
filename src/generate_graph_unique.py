@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from keras.models import model_from_json
 
-BASE_PATH = '../'
-DATASET_PATH = BASE_PATH + 'datasets/'
-RESULT_PATH = BASE_PATH + 'results/'
+import glob
+
+glob.set_dir()
 TYPE = 'RANDOM'
 
 n_timestamps = 198
@@ -23,11 +23,11 @@ HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
 # read model and weights
-with open(RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
+with open(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
           + str(NUM_LAYER)+'_model.json') as f:
     model = model_from_json(f.read())
 
-model.load_weights(RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)
+model.load_weights(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)
                    + '_' + str(NUM_LAYER)+'_weights.h5')
 
 model.compile(optimizer='rmsprop', loss='mse')

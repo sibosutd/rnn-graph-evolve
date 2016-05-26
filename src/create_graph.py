@@ -15,9 +15,9 @@ BA_EDGE = 2
 NUM_OF_SEQ = 198    # hardcode for now
 TYPE = 'RANDOM'
 
-BASE_PATH = '../'
-DATASET_PATH = BASE_PATH + 'datasets/'
-RESULT_PATH = BASE_PATH + 'results/'
+import glob
+
+glob.set_dir()
 
 sequences = np.zeros((NUM_OF_NETWORKS, NUM_OF_SEQ, NUM_OF_NODE))
 
@@ -126,4 +126,4 @@ for num_iter in np.arange(NUM_OF_NETWORKS):
 print sequences.shape
 
 # save sequences
-np.save(RESULT_PATH+TYPE+'.npy', sequences)
+np.save(glob.RESULT_PATH+TYPE+'.npy', sequences)

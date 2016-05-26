@@ -4,22 +4,19 @@ Classifying graphs using RNN.
 Model: BA and RANDOM
 """
 
-import sys
 import numpy as np
-import sklearn
-from sklearn.metrics import confusion_matrix
-from sklearn import svm, cross_validation, preprocessing
+from sklearn import cross_validation
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import SimpleRNN, GRU, LSTM
+from keras.layers import LSTM
 
-BASE_PATH = '../'
-DATASET_PATH = BASE_PATH + 'datasets/'
-RESULT_PATH = BASE_PATH + 'results/'
+import glob
+
+glob.set_dir()
 
 # read data
-sequences_er = np.load(RESULT_PATH+'BA.npy')
-sequences_ba = np.load(RESULT_PATH+'RANDOM.npy')
+sequences_er = np.load(glob.RESULT_PATH+'BA.npy')
+sequences_ba = np.load(glob.RESULT_PATH+'RANDOM.npy')
 X = np.concatenate((sequences_er, sequences_ba), axis=0)
 
 NUM_OF_NODE = X.shape[1]
@@ -30,8 +27,6 @@ X_train, X_test, y_train, y_test = cross_validation\
     .train_test_split(X, y, test_size=0.1)
 print X_train.shape, X_test.shape
 print y_train.shape, y_test.shape
-
-# sys.exit(0)
 
 # LSTM Classification
 model = Sequential()
