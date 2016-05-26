@@ -1,5 +1,5 @@
 """
-Generate statistics of all graphs.
+Convert graph sequences to adjacency matrix.
 
 Use networkx library.
 """
@@ -11,12 +11,12 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM'
+TYPE = 'BA'
 
 sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 n_sample, n_timestamps, n_node = sequences.shape
 
-diam_mat = np.zeros((n_sample, n_timestamps))
+matrices = np.zeros((n_sample, n_node, n_node))
 
 for sample in np.arange(n_sample):
     print sample
@@ -25,9 +25,7 @@ for sample in np.arange(n_sample):
         timestamp = sequences[sample, step, :]
         indices = timestamp.nonzero()
         D.add_edges_from(tuple(indices))
-        # generate largest connected subgraph
-        largest_cc = max(nx.connected_component_subgraphs(D), key=len)
-        diam_mat[sample, step] = nx.diameter(largest_cc)
+    matrices[sample, :, :] = nx.to_numpy_matrix(D)
 
 # save stats as .npy file
-np.save(glob.RESULT_PATH+TYPE+'_diam.npy', diam_mat)
+np.save(glob.DATASET_PATH+TYPE+'_adj.npy', matrices)

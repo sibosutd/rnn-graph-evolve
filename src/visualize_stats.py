@@ -11,7 +11,7 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'BA'
+TYPE = 'RANDOM'
 
 matrix = np.load(glob.RESULT_PATH+TYPE+'_diam.npy')
 
@@ -22,9 +22,9 @@ curve[:, 1] = np.mean(matrix, axis=0)
 curve[:, 0] = np.mean(matrix, axis=0)-np.std(matrix, axis=0)
 curve[:, 2] = np.mean(matrix, axis=0)+np.std(matrix, axis=0)
 
-plt.plot(np.arange(n_timestamps), curve[:, 1], 'k', linewidth=2)
+plt.plot(np.arange(n_timestamps), curve[:, 1], 'r', linewidth=2)
 plt.fill_between(np.arange(n_timestamps), curve[:, 0], curve[:, 2],
-                 alpha=.25, linewidth=0)
+                 facecolor='r', alpha=0.25, linewidth=0)
 plt.grid(True)
-# plt.savefig(glob.RESULT_PATH+TYPE+'_diam.png')
+plt.savefig(glob.RESULT_PATH+TYPE+'_diam.png')
 plt.show()

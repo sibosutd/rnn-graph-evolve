@@ -13,7 +13,7 @@ from keras.models import model_from_json
 import glob
 
 glob.set_dir()
-TYPE = 'BA'
+TYPE = 'RANDOM'
 
 n_timestamps = 198
 temperature = 1.0
@@ -76,6 +76,7 @@ pos = nx.nx_pydot.graphviz_layout(g)
 color = [10*p for p in vis_proba[0].tolist()]
 
 nx.draw(g, pos, node_color=color,
-        node_size=180, cmap=plt.cm.Blues)
-# plt.savefig("node_colormap.png")  # save as png
+        node_size=180, cmap=plt.cm.Reds)
+# save as png
+plt.savefig(glob.RESULT_PATH+TYPE+'_'+str(STOP)+'_prob.png')
 plt.show()  # display
