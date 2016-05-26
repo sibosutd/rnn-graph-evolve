@@ -11,9 +11,9 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM'
+TYPE = 'BA'
 
-matrix = np.save(glob.RESULT_PATH+TYPE+'_diam.npy')
+matrix = np.load(glob.RESULT_PATH+TYPE+'_diam.npy')
 
 n_sample, n_timestamps = matrix.shape
 

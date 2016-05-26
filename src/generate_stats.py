@@ -1,5 +1,5 @@
 """
-Visualize statistics of single graph.
+Visualize statistics of all graphs.
 
 Use networkx library.
 """
