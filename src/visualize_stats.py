@@ -9,17 +9,17 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-BASE_PATH = '../'
-DATASET_PATH = BASE_PATH + 'datasets/'
-RESULT_PATH = BASE_PATH + 'results/'
-TYPE = 'BA'
+import glob
 
-sequences = np.load(DATASET_PATH+TYPE+'.npy')
+glob.set_dir()
+TYPE = 'RANDOM'
+
+sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 n_sample, n_timestamps, n_node = sequences.shape
 
 diam_mat = np.zeros((n_sample, n_timestamps))
 
-num_select = 5000
+num_select = 10
 for sample in np.arange(num_select):
     print sample
     D = nx.Graph(np.zeros((n_node, n_node)))
@@ -41,7 +41,7 @@ plt.fill_between(np.arange(n_timestamps), curve[:, 0], curve[:, 2],
                  alpha=.25, linewidth=0)
 plt.grid(True)
 # nx.draw(D)
-# plt.savefig("test.png")
+# plt.savefig("RANDOM.png")
 plt.show()
 
 # print nx.diameter(D)
