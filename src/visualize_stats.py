@@ -11,7 +11,7 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM'
+TYPE = 'BA_rnn'
 
 matrix = np.load(glob.RESULT_PATH+TYPE+'_diam.npy')
 
