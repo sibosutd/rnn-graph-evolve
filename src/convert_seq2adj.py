@@ -11,7 +11,7 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'BA'
+TYPE = 'RANDOM_rnn'
 
 sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 n_sample, n_timestamps, n_node = sequences.shape
