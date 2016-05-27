@@ -13,7 +13,7 @@ from keras.models import model_from_json
 import glob
 
 glob.set_dir()
-TYPE = 'BA'
+TYPE = 'RANDOM'
 
 n_timestamps = 198
 temperature = 1.2
@@ -21,7 +21,7 @@ NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
-n_sample = 100
+n_sample = 40
 
 # read model and weights
 with open(glob.MODEL_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
@@ -50,7 +50,7 @@ sentences[:, 0, :] = 0
 for j in np.arange(n_sample):
     for i in np.arange(n_timestamps):
         if i % 10 == 0:
-            print str(i)+' iteration, predict the '+str(i)+' edges'
+            print str(j)+' iteration, predict the '+str(i)+' edges'
         probs = model.predict_proba(sentences, verbose=0)[j, i, :]
         probs = probs / np.sum(probs)
         # set temperature to control the tradeoff
