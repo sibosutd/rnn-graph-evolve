@@ -1,5 +1,5 @@
 """
-Visualize degree distribution of all graphs.
+Visualize degree of all indexed nodes.
 
 Use networkx library.
 """
@@ -12,33 +12,24 @@ import glob
 
 glob.set_dir()
 # TYPE = 'RANDOM'
+RNN = ''  # RNN='' or 'rnn_'
 
-degree_ba = np.load(glob.RESULT_PATH+'BA_rnn_degree.npy')
-degree_random = np.load(glob.RESULT_PATH+'RANDOM_rnn_degree.npy')
+degree_ba = np.load(glob.RESULT_PATH+'BA_'+RNN+'degree.npy')
+degree_random = np.load(glob.RESULT_PATH+'RANDOM_'+RNN+'degree.npy')
 
-fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12, 5))
+fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(16, 8))
 
 # rectangular box plot
-bplot1 = axes[0].boxplot(degree_ba,
-                         vert=True,   # vertical box aligmnent
-                         patch_artist=True)   # fill with color
-
-# notch shape box plot
-bplot2 = axes[1].boxplot(degree_random,
-                         vert=True,   # vertical box aligmnent
-                         patch_artist=True)   # fill with color
-
-# fill with colors
-# colors = ['pink', 'lightblue', 'lightgreen']
-# for bplot in (bplot1, bplot2):
-#     for patch, color in zip(bplot['boxes'], colors):
-#         patch.set_facecolor(color)
+bplot1 = axes[0].boxplot(degree_ba, vert=True)
+bplot2 = axes[1].boxplot(degree_random, vert=True)
 
 # adding horizontal grid lines
 for ax in axes:
     ax.yaxis.grid(True)
+    ax.xaxis.set_ticks([])
 
-# plt.boxplot(matrix)
-# plt.grid(True)
-plt.savefig(glob.RESULT_PATH+'rnn_degree.png')
+axes[0].set_title('BA_'+RNN+'average node degree')
+axes[1].set_title('RANDOM_'+RNN+'average node degree')
+
+plt.savefig(glob.FIGURE_PATH+RNN+'degree.png')
 plt.show()

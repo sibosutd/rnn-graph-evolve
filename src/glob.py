@@ -9,7 +9,10 @@ def set_dir():
     global DATASET_PATH
     global MODEL_PATH
     global RESULT_PATH
+    global FIGURE_PATH
+
     BASE_PATH = '../'
     DATASET_PATH = BASE_PATH + 'datasets/'
     MODEL_PATH = BASE_PATH + 'models/'
     RESULT_PATH = BASE_PATH + 'results/'
+    FIGURE_PATH = BASE_PATH + 'figures/'

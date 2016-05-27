@@ -1,5 +1,5 @@
 """
-Generate degree distribution of all graphs.
+Generate degree of all indexed nodes.
 
 Use networkx library.
 """
