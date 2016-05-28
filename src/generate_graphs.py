@@ -13,7 +13,7 @@ from keras.models import model_from_json
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM'
+TYPE = 'BA'
 
 n_timestamps = 198
 temperature = 1.0
@@ -21,7 +21,7 @@ NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
-n_sample = 20
+n_sample = 100
 
 # read model and weights
 with open(glob.MODEL_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
