@@ -22,11 +22,11 @@ HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
 # read model and weights
-with open(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
+with open(glob.MODEL_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
           + str(NUM_LAYER)+'_model.json') as f:
     model = model_from_json(f.read())
 
-model.load_weights(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)
+model.load_weights(glob.MODEL_PATH+TYPE+'_'+str(HIDDEN_UNITS)
                    + '_' + str(NUM_LAYER)+'_weights.h5')
 
 model.compile(optimizer='rmsprop', loss='mse')

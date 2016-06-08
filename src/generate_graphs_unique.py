@@ -10,10 +10,10 @@ from keras.models import model_from_json
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM'
+TYPE = 'BA'
 
 n_timestamps = 198
-temperature = 1.0
+temperature = 0.8
 NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
