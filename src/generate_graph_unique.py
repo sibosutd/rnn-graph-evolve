@@ -5,7 +5,6 @@ Use networkx library.
 """
 
 import sys
-import csv
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,13 +22,14 @@ HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
 # read model and weights
-with open(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)+'_'
-          + str(NUM_LAYER)+'_model.json') as f:
+model_file = '{}{}_{}_{}_model.json' \
+             .format(glob.MODEL_PATH, TYPE, HIDDEN_UNITS, NUM_LAYER)
+weights_file = '{}{}_{}_{}_weights.h5' \
+               .format(glob.MODEL_PATH, TYPE, HIDDEN_UNITS, NUM_LAYER)
+
+with open(model_file) as f:
     model = model_from_json(f.read())
-
-model.load_weights(glob.RESULT_PATH+TYPE+'_'+str(HIDDEN_UNITS)
-                   + '_' + str(NUM_LAYER)+'_weights.h5')
-
+model.load_weights(weights_file)
 model.compile(optimizer='rmsprop', loss='mse')
 
 # init sequences ndarray, 3-d because of training data
@@ -42,8 +42,9 @@ edge_count = 0
 # Start sampling sequences. At each iteration i the probability over
 # the i-th character of each sequences is computed.
 for i in np.arange(n_timestamps):
-    print i
-    probs = model.predict_proba(sentences)[:, i, :]
+    if i % 10 == 0:
+        print 'predict the {} edge'.format(i)
+    probs = model.predict_proba(sentences, verbose=0)[:, i, :]
     probs = probs / np.sum(probs)
     # set temperature to control the tradeoff
     probs = np.log(probs) / temperature
