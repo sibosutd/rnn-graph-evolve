@@ -19,7 +19,7 @@ TYPE = 'BA'
 
 n_timestamps = 198
 n_t_train = 150
-temperature = 0.9
+temperature = 1.0
 NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
@@ -51,6 +51,7 @@ model.add(TimeDistributed(Dense(NUM_OF_NODE, activation='softmax')))
 # load non-stateful model weight
 model.load_weights(weights_file)
 model.compile(optimizer='rmsprop', loss='mse')
+model.reset_states()
 
 # init prediction sequences ndarray, 3-d because of training data
 pred_seq = np.zeros((1, n_timestamps+1, NUM_OF_NODE))
@@ -75,6 +76,7 @@ for i in np.arange(1, n_t_train):
     graph_matrix[two_node[1], two_node[0]] = 1
     graph_matrix_train[two_node[0], two_node[1]] = 1
     graph_matrix_train[two_node[1], two_node[0]] = 1
+    print two_node, 
 
 # predicting stage
 for i in np.arange(n_t_train, n_timestamps):
