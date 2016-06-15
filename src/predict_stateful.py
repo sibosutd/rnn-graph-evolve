@@ -18,12 +18,12 @@ glob.set_dir()
 TYPE = 'BA'
 
 n_timestamps = 198
-n_t_train = 150
-temperature = 1.0
+n_t_train = 160
+temperature = .9
 NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
-select_index = 0
+select_index = 5
 
 # load network data
 orig_seq = np.load(glob.DATASET_PATH+TYPE+'.npy')
@@ -53,6 +53,9 @@ model.load_weights(weights_file)
 model.compile(optimizer='rmsprop', loss='mse')
 model.reset_states()
 
+# print parameters
+print 'Parameter:\n\tSteps: {}\n\tTemp: {}'.format(n_t_train, temperature)
+
 # init prediction sequences ndarray, 3-d because of training data
 pred_seq = np.zeros((1, n_timestamps+1, NUM_OF_NODE))
 pred_seq[:, :n_t_train, :] = orig_seq[[select_index], :n_t_train, :]
@@ -63,10 +66,9 @@ edge_count = 0
 
 # store training data as adjacency matrix
 for i in np.arange(1, n_t_train):
-    print 'train the {} edge'.format(i)
     # silly way of handling dimensions
     model.fit(orig_seq[[select_index], i-1:i, :],
-              pred_seq[:, [i], :],
+              orig_seq[[select_index], i:i+1, :],
               batch_size=1,
               nb_epoch=1,
               verbose=0)
@@ -76,19 +78,12 @@ for i in np.arange(1, n_t_train):
     graph_matrix[two_node[1], two_node[0]] = 1
     graph_matrix_train[two_node[0], two_node[1]] = 1
     graph_matrix_train[two_node[1], two_node[0]] = 1
-    print two_node, 
+    print 'train the {} edge: {}'.format(i, two_node)
 
 # predicting stage
 for i in np.arange(n_t_train, n_timestamps):
-    print 'predict the {} edge'.format(i)
-    # dynamic evaluation using stateful rnn
-    model.fit(orig_seq[[select_index], i-1:i, :],
-              pred_seq[:, i:i+1, :],
-              batch_size=1,
-              nb_epoch=1,
-              verbose=0)
-
-    probs = model.predict_proba(pred_seq[:, i:i+1, :], verbose=0)
+    # predict the probability of next edge
+    probs = model.predict_proba(pred_seq[:, [i-1], :], verbose=0)
     probs = probs / np.sum(probs)
     # set temperature to control the trade-off
     probs = np.log(probs) / temperature
@@ -104,10 +99,19 @@ for i in np.arange(n_t_train, n_timestamps):
             if graph_matrix[select_nodes[0], select_nodes[1]] != 1:
                 break
         for node in select_nodes:
-            pred_seq[j, i+1, node] = 1
+            pred_seq[j, i, node] = 1
         # update adjacency matrix
         graph_matrix[select_nodes[0], select_nodes[1]] = 1
         graph_matrix[select_nodes[1], select_nodes[0]] = 1
+    # dynamic evaluation using stateful rnn, update the model
+    # model.fit(orig_seq[[select_index], i-1:i, :],
+    #           pred_seq[:, i:i+1, :],
+    model.fit(pred_seq[:, [i-1], :],
+              pred_seq[:, [i], :],
+              batch_size=1,
+              nb_epoch=1,
+              verbose=0)
+    print 'predict the {} edge: {}'.format(i, select_nodes)
 
 # construct graphs
 g_0 = nx.Graph(graph_matrix_train)
@@ -121,14 +125,27 @@ hist_1 = np.asarray(nx.degree(g_1).values()) \
 hist_2 = np.asarray(nx.degree(g_2).values()) \
          - np.asarray(nx.degree(g_0).values())
 
+# degree distribution
+num_bins = 30
+degree_dist_0 = np.asarray(nx.degree(g_0).values())
+degree_dist_1 = np.asarray(nx.degree(g_1).values())
+degree_dist_2 = np.asarray(nx.degree(g_2).values())
+
 # plot
-fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(16, 8))
-axes[0].set_title('Degrees of nodes - Ground truth')
-axes[1].set_title('Degrees of nodes - Predicted')
-axes[0].bar(np.arange(100), hist_0, color='k')
-axes[1].bar(np.arange(100), hist_0, color='k')
-axes[0].bar(np.arange(100), hist_1, bottom=hist_0, color='r')
-axes[1].bar(np.arange(100), hist_2, bottom=hist_0, color='b')
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 8))
+axes[0, 0].set_title('Degrees of nodes - Ground truth')
+axes[1, 0].set_title('Degrees of nodes - Predicted')
+axes[0, 0].bar(np.arange(100), hist_0, color='k')
+axes[1, 0].bar(np.arange(100), hist_0, color='k')
+axes[0, 0].bar(np.arange(100), hist_1, bottom=hist_0, color='r')
+axes[1, 0].bar(np.arange(100), hist_2, bottom=hist_0, color='b')
+
+axes[0, 1].set_title('Degrees distribution - Ground truth')
+axes[1, 1].set_title('Degrees distribution - Predicted')
+# axes[2].bar(np.arange(100), hist_0, color='k')
+# axes[3].bar(np.arange(100), hist_0, color='k')
+axes[0, 1].hist(degree_dist_1, num_bins, range=(0, 30), color='r')
+axes[1, 1].hist(degree_dist_2, num_bins, range=(0, 30), color='b')
 
 # display
 plt.show()
