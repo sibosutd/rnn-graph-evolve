@@ -19,7 +19,7 @@ TYPE = 'BA'
 
 n_timestamps = 198
 n_t_train = 160
-temperature = .9
+temperature = .8
 NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
@@ -106,11 +106,11 @@ for i in np.arange(n_t_train, n_timestamps):
     # dynamic evaluation using stateful rnn, update the model
     # model.fit(orig_seq[[select_index], i-1:i, :],
     #           pred_seq[:, i:i+1, :],
-    model.fit(pred_seq[:, [i-1], :],
-              pred_seq[:, [i], :],
-              batch_size=1,
-              nb_epoch=1,
-              verbose=0)
+    # model.fit(pred_seq[:, [i-1], :],
+    #           pred_seq[:, [i], :],
+    #           batch_size=1,
+    #           nb_epoch=1,
+    #           verbose=0)
     print 'predict the {} edge: {}'.format(i, select_nodes)
 
 # construct graphs

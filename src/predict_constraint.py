@@ -8,10 +8,10 @@ import sys
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
-
 from keras.models import Sequential
 from keras.layers import TimeDistributed
 from keras.layers import Dense, LSTM
+
 import glob
 
 glob.set_dir()
@@ -19,11 +19,11 @@ TYPE = 'BA'
 
 n_timestamps = 198
 n_t_train = 150
-temperature = .6
+temperature = .8
 NUM_OF_NODE = 100
 HIDDEN_UNITS = 256
 NUM_LAYER = 2
-select_index = 7
+select_index = 4
 
 # load network data
 orig_seq = np.load(glob.DATASET_PATH+TYPE+'.npy')
