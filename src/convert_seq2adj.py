@@ -11,7 +11,8 @@ import numpy as np
 import glob
 
 glob.set_dir()
-TYPE = 'RANDOM_rnn'
+# TYPE = 'RANDOM_rnn'
+TYPE = 'real'
 
 sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 n_sample, n_timestamps, n_node = sequences.shape
@@ -24,7 +25,8 @@ for sample in np.arange(n_sample):
     for step in np.arange(1, n_timestamps):
         timestamp = sequences[sample, step, :]
         indices = timestamp.nonzero()
-        D.add_edges_from(tuple(indices))
+        if indices[0].shape[0]:
+            D.add_edges_from(tuple(indices))
     matrices[sample, :, :] = nx.to_numpy_matrix(D)
 
 # save stats as .npy file
