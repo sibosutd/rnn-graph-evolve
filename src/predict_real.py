@@ -24,8 +24,8 @@ adj_matrices = np.load(glob.DATASET_PATH+TYPE+'_adj.npy')
 _, n_timestamps, NUM_OF_NODE = orig_seq.shape
 # n_timestamps = 1500
 # NUM_OF_NODE = 1000
-n_t_train = 1200
-temperature = .9
+n_t_train = 1500
+temperature = 1.
 HIDDEN_UNITS = 128
 NUM_LAYER = 2
 select_index = 2
@@ -107,11 +107,11 @@ for i in np.arange(n_t_train, n_timestamps):
     # dynamic evaluation using stateful rnn, update the model
     # model.fit(orig_seq[[select_index], i-1:i, :],
     #           pred_seq[:, i:i+1, :],
-    # model.fit(pred_seq[:, [i-1], :],
-    #           pred_seq[:, [i], :],
-    #           batch_size=1,
-    #           nb_epoch=1,
-    #           verbose=0)
+    model.fit(pred_seq[:, [i-1], :],
+              pred_seq[:, [i], :],
+              batch_size=1,
+              nb_epoch=1,
+              verbose=0)
     print 'predict the {} edge: {}'.format(i, select_nodes)
 
 # construct graphs

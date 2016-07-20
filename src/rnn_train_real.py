@@ -14,7 +14,7 @@ glob.set_dir()
 
 TYPE = 'real'
 
-sequences = np.load(glob.DATASET_PATH+'real_seq.npy')
+sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 
 NUM_OF_NODE = sequences.shape[2]
 n_timestamps = sequences.shape[1]
