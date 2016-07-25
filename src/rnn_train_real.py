@@ -18,7 +18,7 @@ sequences = np.load(glob.DATASET_PATH+TYPE+'.npy')
 
 NUM_OF_NODE = sequences.shape[2]
 n_timestamps = sequences.shape[1]
-HIDDEN_UNITS = 128
+HIDDEN_UNITS = 256
 NUM_LAYER = 2
 
 y = np.roll(sequences, -1, axis=1)
@@ -32,7 +32,7 @@ model.add(LSTM(HIDDEN_UNITS, return_sequences=True))
 model.add(TimeDistributed(Dense(NUM_OF_NODE, activation='softmax')))
 # model.add(Activation('softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
-model.fit(sequences, y, batch_size=64, nb_epoch=100)
+model.fit(sequences, y, batch_size=64, nb_epoch=200)
 
 
 model_file = '{}{}_{}_{}_model.json' \

@@ -24,11 +24,11 @@ adj_matrices = np.load(glob.DATASET_PATH+TYPE+'_adj.npy')
 _, n_timestamps, NUM_OF_NODE = orig_seq.shape
 # n_timestamps = 198
 # NUM_OF_NODE = 100
-n_t_train = 1500
-temperature = .8
+n_t_train = 1200
+temperature = 1.
 HIDDEN_UNITS = 128
 NUM_LAYER = 2
-select_index = 0
+select_index = 2
 
 # format file name of models and weights
 model_file = '{}{}_{}_{}_model.json' \
@@ -89,6 +89,7 @@ for i in np.arange(1, n_t_train):
     print 'train the {} edge: {}'.format(i, two_node)
 
 # predicting stage
+break_flag = 0
 for i in np.arange(n_t_train, n_timestamps):
     # predict the probability of next edge
     probs = model.predict_proba(pred_seq[:, [i-1], :], verbose=0)
@@ -112,8 +113,14 @@ for i in np.arange(n_t_train, n_timestamps):
         graph_matrix[select_nodes[0], select_nodes[1]] = 1
         graph_matrix[select_nodes[1], select_nodes[0]] = 1
         two_node = orig_seq[select_index, i, :].nonzero()[0]
-        graph_matrix_train[two_node[0], two_node[1]] = 1
-        graph_matrix_train[two_node[1], two_node[0]] = 1
+        if two_node != []:
+            graph_matrix_train[two_node[0], two_node[1]] = 1
+            graph_matrix_train[two_node[1], two_node[0]] = 1
+        else:
+            break_flag = 1
+            break
+    if break_flag:
+        break
     # dynamic evaluation using stateful rnn, update the model
     # model.fit(orig_seq[[select_index], i-1:i, :],
     #           pred_seq[:, i:i+1, :],
@@ -136,6 +143,7 @@ plt.plot(np.arange(n_t_train, n_timestamps),
          diam_vec_gt[n_t_train:], 'b', linewidth=2)
 plt.plot(np.arange(n_t_train, n_timestamps),
          diam_vec_pred[n_t_train:], 'r', linewidth=2)
+plt.savefig(glob.FIGURE_PATH+TYPE+'_diam.png')
 
 # # construct graphs
 # g_0 = nx.Graph(graph_matrix_train)
